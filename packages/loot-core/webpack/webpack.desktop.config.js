@@ -1,51 +1,45 @@
-let path = require('path');
-let webpack = require('webpack');
+const path = require('path');
 
+const webpack = require('webpack');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
+const browser = require('./webpack.browser.config');
+
+/** @type {webpack.Configuration} */
 module.exports = {
-  mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
+  ...browser,
   target: 'node',
-  entry: path.join(__dirname, '../src/server/main.js'),
-  context: path.resolve(__dirname, '../../..'),
   devtool: 'source-map',
   output: {
-    path: path.resolve(path.join(__dirname, '/../lib-dist')),
+    path: path.resolve(path.join(__dirname, '/../lib-dist/electron')),
     filename: 'bundle.desktop.js',
     sourceMapFilename: 'bundle.desktop.js.map',
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'commonjs2',
   },
   resolve: {
-    extensions: ['.electron.js', '.js', '.json'],
-    alias: {
-      'perf-deets': require.resolve('perf-deets/noop')
-    }
+    extensions: [
+      '.electron.js',
+      '.electron.ts',
+      '.electron.tsx',
+      '.js',
+      '.ts',
+      '.tsx',
+      '.json',
+      'pegjs',
+    ],
   },
-  externals: [
-    'better-sqlite3',
-    'node-ipc',
-    'electron-log',
-    'node-fetch',
-    'node-libofx'
-  ],
-  module: {
-    rules: [
-      {
-        test: /\.m?js$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['babel-preset-jwl-app']
-          }
-        }
-      }
-    ]
-  },
+  externals: ['better-sqlite3'],
   plugins: [
     new webpack.IgnorePlugin({
-      resourceRegExp: /original-fs/
-    })
+      resourceRegExp: /original-fs/,
+    }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'disabled',
+      generateStatsFile: true,
+    }),
   ],
   node: {
     __dirname: false,
-    __filename: false
-  }
+    __filename: false,
+  },
 };

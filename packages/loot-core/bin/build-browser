@@ -4,9 +4,16 @@ cd `dirname "$0"`
 ROOT=`pwd -P`
 WEBPACK_ARGS=""
 
-"$ROOT"/copy-migrations
+PUBLIC_DIR="$ROOT"/../../desktop-client/public
+DATA_DIR="$PUBLIC_DIR"/data
+mkdir -p "$DATA_DIR"
+"$ROOT"/copy-migrations "$DATA_DIR"
 
-OUTPUT_HASH="[hash]"
+cd "$DATA_DIR"
+find * -type f | sort > ../data-file-index.txt
+cd "$ROOT"
+
+OUTPUT_HASH="[contenthash]"
 if [ $NODE_ENV == 'development' ]; then
     # Use a constant filename in development mode to make it easier to
     # rebuild the backend without having to rebuild the frontend
@@ -22,13 +29,19 @@ if [ $NODE_ENV == 'development' ]; then
   # Make sure to do this before starting the build since watch mode
   # will block
   WEBPACK_ARGS="$WEBPACK_ARGS --watch"
+  if [ "$OSTYPE" == "msys" ]; then
+    # Ensure symlinks are created as native Windows symlinks.
+    export MSYS=winsymlinks:nativestrict
+  fi
   ln -snf "$ROOT"/../lib-dist/browser ../../desktop-client/public/kcab
 fi
 
-../node_modules/.bin/webpack --config ../webpack/webpack.browser.config.js \
+cp ../../../node_modules/@jlongster/sql.js/dist/sql-wasm.wasm "$PUBLIC_DIR"/sql-wasm.wasm
+
+yarn webpack --config ../webpack/webpack.browser.config.js \
   --target "webworker" \
   --output-filename "kcab.worker.$OUTPUT_HASH.js" \
-  --output-chunkfilename "[id].[name].kcab.worker.$OUTPUT_HASH.js" \
+  --output-chunk-filename "[id].[name].kcab.worker.$OUTPUT_HASH.js" \
   --progress \
   $WEBPACK_ARGS
 

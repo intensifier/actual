@@ -1,72 +1,79 @@
-This is the source code for [Actual](https://actualbudget.com), a local-first personal finance tool. It is 100% free and open-source.
+<p align="center">
+  <img src="/demo.png" alt="Actualbudget" />
+</p>
 
-If you are only interested in running the latest version, you don't need this repo. You can get the latest version through npm.
+## Getting Started
 
-More docs are available in the [docs](https://github.com/actualbudget/actual/tree/master/docs) folder.
+Actual is a local-first personal finance tool. It is 100% free and open-source, written in NodeJS, it has a synchronization element so that all your changes can move between devices without any heavy lifting.
 
-If you are interested in contributing, or want to know how development works, see [CONTRIBUTING.md](https://github.com/actualbudget/actual/blob/master/CONTRIBUTING.md)
+If you are interested in contributing, or want to know how development works, see our [contributing](https://actualbudget.org/docs/contributing/) document we would love to have you.
 
-Join the [discord](https://discord.gg/pRYNYr4W5A)!
+Want to say thanks? Click the ⭐ at the top of the page.
+
+## Key Links
+
+- Actual [discord](https://discord.gg/pRYNYr4W5A) community.
+- Actual [Community Documentation](https://actualbudget.org/docs)
+- [Frequently asked questions](https://actualbudget.org/docs/faq)
 
 ## Installation
 
-### The easy way: using a server (recommended)
+There are four ways to deploy Actual:
 
-The easiest way to get Actual running is to use the [actual-server](https://github.com/actualbudget/actual-server) project. That is the server for syncing changes across devices, and it comes with the latest version of Actual. The server will provide both the web project and a server for syncing.
+1. One-click deployment [via PikaPods](https://www.pikapods.com/pods?run=actual) (~1.40 $/month) - recommended for non-technical users
+1. Managed hosting [via Fly.io](https://actualbudget.org/docs/install/fly) (~1.50 $/month)
+1. Self-hosted by using [a Docker image](https://actualbudget.org/docs/install/docker)
+1. Local-only apps - [downloadable Windows, Mac and Linux apps](https://actualbudget.org/download/) you can run on your device
 
-```
-git clone https://github.com/actualbudget/actual-server.git
-cd actual-server
-yarn install
-yarn start
-```
+Learn more in the [installation instructions docs](https://actualbudget.org/docs/install/).
 
-Navigate to https://localhost:5006 in your browser and you will see Actual.
+## Ready to Start Budgeting?
 
-You should deploy the server somewhere so you can access your data from anywhere. See instructions on the [actual-server](https://github.com/actualbudget/actual-server) repo.
+Read about [Envelope budgeting](https://actualbudget.org/docs/getting-started/envelope-budgeting) to know more about the idea behind Actual Budget.
 
-### Without a server
+### Are you new to budgeting or want to start fresh?
 
-This will give you a fully local web app without a server. This npm package is the `packages/desktop-client` package in this repo built for production:
+Check out the community's [Starting Fresh](https://actualbudget.org/docs/getting-started/starting-fresh) guide so you can quickly get up and running!
 
-```
-yarn add @actual-app/web
-```
+### Are you migrating from other budgeting apps?
 
-Now you need to serve the files in `node_modules/@actual-app/web/build`. One way to do it:
+Check out the community's [Migration](https://actualbudget.org/docs/migration/) guide to start jumping on the Actual Budget train!
 
-```
-cd node_modules/@actual-app/web/build
-npx http-server .
-```
+## Documentation
 
-Navigate to http://localhost:8080 and you should see Actual.
+We have a wide range of documentation on how to use Actual, this is all available in our [Community Documentation](https://actualbudget.org/docs), this includes topics on Budgeting, Account Management, Tips & Tricks and some documentation for developers.
 
-## Building
+## Contributing
 
-If you want to build the latest version, see [releasing.md](https://github.com/actualbudget/actual/blob/master/docs/releasing.md). It provides instructions for building this code into the same artifacts that come from npm.
+Actual is a community driven product. Learn more about [contributing to Actual](https://actualbudget.org/docs/contributing/).
 
-## Run locally
+### Code structure
 
-Both the electron and web app can started with a single command. When running in development, it will store data in a `data` directory in the root of the `actual` directory.
+The Actual app is split up into a few packages:
 
-First, make sure to run `yarn install` to install all dependencies.
+- loot-core - The core application that runs on any platform
+- desktop-client - The desktop UI
+- desktop-electron - The desktop app
 
-In the root of the project:
+More information on the project structure is available in our [community documentation](https://actualbudget.org/docs/contributing/project-details).
 
-```
-yarn start            # Run the electron app
-yarn start:browser    # Run the web app
-```
+### Feature Requests
 
-## Code structure
+Current feature requests can be seen [here](https://github.com/actualbudget/actual/issues?q=is%3Aissue+label%3A%22needs+votes%22+sort%3Areactions-%2B1-desc).
+Vote for your favorite requests by reacting :+1: to the top comment of the request.
 
-The app is split up into a few packages:
+To add new feature requests, open a new Issue of the "Feature Request" type.
 
-* loot-core - The core application that runs on any platform
-* loot-design - The generic design components that make up the UI
-* desktop-client - The desktop UI
-* desktop-electron - The desktop app
-* mobile - The mobile app
+### Translation
 
-More docs are available in the [docs](https://github.com/actualbudget/actual/tree/master/docs) folder.
+Make Actual Budget accessible to more people by helping with the [Internationalization](https://actualbudget.org/docs/contributing/i18n/) of Actual. We are using a crowd sourcing tool to manage the translations, see our [Weblate Project](https://hosted.weblate.org/projects/actualbudget/). Weblate proudly supports open-source software projects through their [Libre plan](https://weblate.org/en/hosting/#libre). 
+
+## Repo Activity
+
+![Alt](https://repobeats.axiom.co/api/embed/e20537dd8b74956f86736726ccfbc6f0565bec22.svg 'Repobeats analytics image')
+
+## Sponsors
+
+Thanks to our wonderful sponsors who make Actual Budget possible!
+
+<a href="https://www.netlify.com"> <img src="https://www.netlify.com/v3/img/components/netlify-color-accent.svg" alt="Deploys by Netlify" /> </a>

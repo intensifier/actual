@@ -11,24 +11,24 @@ class Query {
       validateRefs: true,
       limit: null,
       offset: null,
-      ...state
+      ...state,
     };
   }
 
   filter(expr) {
     return new Query({
       ...this.state,
-      filterExpressions: [...this.state.filterExpressions, expr]
+      filterExpressions: [...this.state.filterExpressions, expr],
     });
   }
 
   unfilter(exprs) {
-    let exprSet = new Set(exprs);
+    const exprSet = new Set(exprs);
     return new Query({
       ...this.state,
       filterExpressions: this.state.filterExpressions.filter(
-        expr => !exprSet.has(Object.keys(expr)[0])
-      )
+        expr => !exprSet.has(Object.keys(expr)[0]),
+      ),
     });
   }
 
@@ -37,13 +37,13 @@ class Query {
       exprs = [exprs];
     }
 
-    let query = new Query({ ...this.state, selectExpressions: exprs });
+    const query = new Query({ ...this.state, selectExpressions: exprs });
     query.state.calculation = false;
     return query;
   }
 
   calculate(expr) {
-    let query = this.select({ result: expr });
+    const query = this.select({ result: expr });
     query.state.calculation = true;
     return query;
   }
@@ -55,7 +55,7 @@ class Query {
 
     return new Query({
       ...this.state,
-      groupExpressions: [...this.state.groupExpressions, ...exprs]
+      groupExpressions: [...this.state.groupExpressions, ...exprs],
     });
   }
 
@@ -66,7 +66,7 @@ class Query {
 
     return new Query({
       ...this.state,
-      orderExpressions: [...this.state.orderExpressions, ...exprs]
+      orderExpressions: [...this.state.orderExpressions, ...exprs],
     });
   }
 
@@ -99,24 +99,6 @@ class Query {
   }
 }
 
-function getPrimaryOrderBy(query, defaultOrderBy) {
-  let orderExprs = query.serialize().orderExpressions;
-  if (orderExprs.length === 0) {
-    if (defaultOrderBy) {
-      return { order: 'asc', ...defaultOrderBy };
-    }
-    return null;
-  }
-
-  let firstOrder = orderExprs[0];
-  if (typeof firstOrder === 'string') {
-    return { field: firstOrder, order: 'asc' };
-  }
-  // Handle this form: { field: 'desc' }
-  let [field] = Object.keys(firstOrder);
-  return { field, order: firstOrder[field] };
-}
-
-module.exports = function q(table) {
+export function q(table) {
   return new Query({ table });
-};
+}

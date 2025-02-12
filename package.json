@@ -18,50 +18,69 @@
     ]
   },
   "scripts": {
-    "start": "npm-run-all --parallel 'start:desktop-*'",
+    "start": "yarn start:browser",
+    "start:server": "yarn workspace actual-sync start",
+    "start:desktop": "yarn rebuild-electron && npm-run-all --parallel 'start:desktop-*'",
     "start:desktop-node": "yarn workspace loot-core watch:node",
     "start:desktop-client": "yarn workspace @actual-app/web watch",
-    "start:desktop-electron": "yarn workspace Actual watch",
+    "start:desktop-electron": "yarn workspace desktop-electron watch",
+    "start:electron": "yarn start:desktop",
     "start:browser": "npm-run-all --parallel 'start:browser-*'",
     "start:browser-backend": "yarn workspace loot-core watch:browser",
     "start:browser-frontend": "yarn workspace @actual-app/web start:browser",
-    "test": "./node_modules/.bin/jest --maxWorkers=4",
-    "test:debug": "node ./node_modules/.bin/jest --runInBand --useStderr",
-    "test:debug-brk": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
+    "build:browser": "./bin/package-browser",
+    "build:desktop": "./bin/package-electron",
+    "build:api": "yarn workspace @actual-app/api build",
+    "generate:i18n": "yarn workspace @actual-app/web generate:i18n",
+    "test": "yarn workspaces foreach --all --parallel --verbose run test",
+    "test:debug": "yarn workspaces foreach --all --verbose run test",
+    "e2e": "yarn workspaces foreach --all --parallel --verbose run e2e",
+    "vrt": "yarn workspaces foreach --all --parallel --verbose run vrt",
+    "vrt:docker": "./bin/run-vrt",
     "rebuild-electron": "./node_modules/.bin/electron-rebuild -f -m ./packages/loot-core",
     "rebuild-node": "yarn workspace loot-core rebuild",
-    "lint": "yarn workspace loot-core lint",
-    "postinstall": "rm -rf ./packages/loot-design/node_modules/react && rm -rf ./packages/mobile/node_modules/react && rm -rf ./node_modules/react-native && patch-package"
+    "lint": "eslint . --max-warnings 0",
+    "lint:verbose": "DEBUG=eslint:cli-engine eslint . --max-warnings 0",
+    "install:server": "yarn workspaces focus actual-sync --production",
+    "typecheck": "yarn tsc && tsc-strict",
+    "jq": "./node_modules/node-jq/bin/jq",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.18.2",
-    "cross-env": "^5.1.5",
-    "husky": "^3.0.4",
-    "npm-run-all": "^4.1.3",
-    "patch-package": "^6.1.2",
-    "prettier": "^1.18.1",
-    "pretty-quick": "^1.11.1",
-    "shelljs": "^0.8.2",
-    "source-map-support": "^0.5.21"
-  },
-  "eslintConfig": {
-    "extends": "react-app",
-    "rules": {
-      "no-unused-vars": "off",
-      "no-loop-func": "off",
-      "no-restricted-globals": "off"
-    }
-  },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "none"
+    "@typescript-eslint/parser": "^8.18.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.7.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "5.2.1",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-rulesdir": "^0.2.2",
+    "globals": "^15.13.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.9",
+    "node-jq": "^4.0.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.4.2",
+    "source-map-support": "^0.5.21",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.18.1",
+    "typescript-strict-plugin": "^2.4.4"
   },
   "resolutions": {
-    "@babel/preset-env": "^7.15.1",
-    "@babel/core": "^7.15.1",
-    "@babel/runtime": "^7.15.1",
-    "@babel/helper-plugin-utils": "^7.14.5",
-    "react-error-overlay": "6.0.9"
+    "rollup": "4.9.4"
   },
-  "packageManager": "yarn@3.2.0"
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,md,json}": "prettier --write"
+  },
+  "packageManager": "yarn@4.3.1",
+  "browserslist": [
+    "electron 24.0",
+    "defaults"
+  ]
 }

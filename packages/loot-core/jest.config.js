@@ -1,17 +1,25 @@
-const isReactNative = process.env.REACT_APP_IS_REACT_NATIVE;
-
 module.exports = {
-  moduleFileExtensions: ['testing.js', 'electron.js']
-    .concat(isReactNative ? ['ios.js', 'mobile.js'] : [])
-    .concat(['mjs', 'js', 'json']),
-  setupFilesAfterEnv: ['<rootDir>/src/mocks/setup.js'],
+  moduleFileExtensions: [
+    'testing.js',
+    'testing.ts',
+    'electron.js',
+    'electron.ts',
+    'mjs',
+    'js',
+    'ts',
+    'tsx',
+    'json',
+  ],
+  setupFilesAfterEnv: ['<rootDir>/src/mocks/setup.ts'],
   testEnvironment: 'node',
-  testPathIgnorePatterns: ['/node_modules/', '/lib/', 'index.web.test.js'],
-  transformIgnorePatterns: ['__mocks__'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/lib/',
+    '.+/index\\.web\\.test\\.(js|ts|tsx)',
+  ],
+  transformIgnorePatterns: ['/node_modules/'],
   transform: {
-    '^.+\\.(js|ts|tsx)?$': '<rootDir>/../../jest-babel-transformer'
+    '\\.pegjs$': '<rootDir>/peg-transform.mjs',
+    '^.+\\.(t|j)sx?$': '@swc/jest',
   },
-  globals: {
-    __TESTING__: true
-  }
 };
